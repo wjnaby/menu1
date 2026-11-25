@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Menu digital restoran">
+<title>Menu · Restoran Contoh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eadfdc;
+    --card: #fbf6f4;
+    --paper: #f8f3f0;
+    --ink: #6b2030;
+    --soft: #8d5c66;
+    --accent: #7a2434;
+    --gold: #e4c2b8;
+    --line: #eadcd8;
+    --ease: cubic-bezier(.22, .61, .36, 1);
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Jost", system-ui, sans-serif;
+    font-weight: 300;
+    color: var(--ink);
+    background: var(--bg);
+    padding: 14px 14px 110px;
+  }
+  button, input, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+
+  .board {
+    position: relative;
+    max-width: 920px;
+    margin: 0 auto;
+    background: var(--paper);
+    overflow: hidden;
+    animation: fadeDown .9s var(--ease) both;
+  }
+  .sprig { position: absolute; width: 108px; height: 70px; pointer-events: none; }
+  .sprig-a { top: 22px; left: 18px; }
+  .sprig-b { right: 16px; bottom: 92px; transform: scaleX(-1); }
+  @media (max-width: 720px) { .sprig-a, .sprig-b { display: none; } }
+
+  /* Header */
+  .hero {
+    position: relative;
+    padding: 42px 24px 8px;
+    text-align: center;
+    color: var(--ink);
+    background: transparent;
+  }
+  .kicker {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: .42em;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    margin: 4px 0 0;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(4.4rem, 18vw, 6.4rem);
+    letter-spacing: .14em;
+    line-height: .85;
+    text-transform: uppercase;
+  }
+  .ornament {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    max-width: 240px; margin: 14px auto 0;
+  }
+  .ornament span { flex: 1; height: 1px; background: var(--ink); }
+  .ornament svg { width: 34px; height: 20px; display: block; }
+  .aside {
+    display: flex; flex-direction: column; align-items: center;
+    max-width: 16rem;
+    margin: 16px auto 0;
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    line-height: 1.55;
+    text-align: center;
+  }
+  .aside .dot { letter-spacing: 0; font-size: 14px; line-height: 1; }
+  .hero small { display: block; margin-top: 10px; color: var(--soft); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
+  .langs { display: flex; justify-content: center; gap: 6px; margin-top: 16px; }
+  .langs button {
+    border: 0; border-bottom: 1px solid transparent; background: transparent;
+    padding: 4px 10px; color: var(--soft);
+    font-size: 11px; letter-spacing: .18em;
+  }
+  .langs button.on { color: var(--ink); border-color: var(--ink); }
+  @media (min-width: 780px) {
+    .aside {
+      position: absolute; right: 36px; top: 36px;
+      margin: 0; max-width: 11rem; align-items: flex-end; text-align: right;
+    }
+  }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+
+  .owner-top {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 22px 22px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+  }
+  .owner-kicker {
+    margin: 0;
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--soft);
+  }
+  .owner-top h1 {
+    margin: 4px 0 0;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(2.4rem, 6vw, 3.4rem);
+    line-height: .95;
+    color: var(--ink);
+  }
+  .owner-note { margin: 0; max-width: 16rem; color: var(--soft); font-size: 13px; line-height: 1.45; text-align: right; }
+
+  /* Category tabs */
+  .tabs {
+    position: sticky; top: 0; z-index: 20;
+    display: flex; gap: 4px; justify-content: safe center;
+    overflow-x: auto;
+    padding: 14px 18px 6px;
+    background: rgba(246, 241, 231, .94);
+    backdrop-filter: blur(8px);
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button {
+    flex: none;
+    padding: 8px 12px;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    transition: background .3s var(--ease), color .3s, border-color .3s, transform .2s;
+  }
+  .tabs button:active { transform: scale(.97); }
+  .tabs button.active { background: transparent; border-color: var(--ink); color: var(--ink); }
+
+  /* Sections */
+  main { max-width: 820px; margin: 0 auto; padding: 8px 22px 0; }
+  .cat { position: relative; scroll-margin-top: 56px; padding-top: 6px; }
+  .cat h2 {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;
+  }
+
+  /* Items */
+  .item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 22px;
+    align-items: center;
+    padding: 28px 0;
+    opacity: 0; transform: translateY(14px);
+    transition: opacity .7s var(--ease), transform .7s var(--ease);
+  }
+  .item.in { opacity: 1; transform: none; }
+  .item.flip .photo { order: -1; }
+  .item.flip .info { text-align: left; }
+  .photo {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 22px;
+    background: #f0e4e1;
+  }
+  .info { min-width: 0; }
+  .num {
+    display: block;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 600;
+    font-variant-numeric: lining-nums;
+    font-size: clamp(1.7rem, 3.2vw, 2.15rem);
+    letter-spacing: .14em;
+    line-height: 1;
+  }
+  .course {
+    display: block;
+    margin-top: 8px;
+    font-size: 11px;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+  }
+  .info h3 {
+    margin: 8px 0 0;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(1.7rem, 3.6vw, 2.45rem);
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+  .info p { margin: 12px 0 0; color: var(--soft); font-size: 13px; line-height: 1.6; letter-spacing: .04em; }
+  .tags { margin-top: 8px; color: var(--soft); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+  .orderline { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+  .price { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: 1.2rem; color: var(--ink); white-space: nowrap; }
+  @media (max-width: 520px) {
+    main { padding: 4px 12px 0; }
+    .item { gap: 10px 12px; padding: 16px 0; }
+    .photo { border-radius: 14px; aspect-ratio: 1; }
+    .course { letter-spacing: .12em; font-size: 9px; }
+    .info p { font-size: 12px; }
+  }
+
+  .add, .stepper button {
+    border-radius: 999px;
+    transition: transform .2s var(--ease), background .3s, color .3s;
+  }
+  .add {
+    padding: 7px 14px;
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    font-size: 12px; letter-spacing: .06em;
+  }
+  .add:hover { background: var(--ink); color: var(--paper); }
+  .add:active, .stepper button:active { transform: scale(.92); }
+  .stepper {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 3px; border-radius: 999px; background: var(--ink); color: var(--paper);
+  }
+  .stepper button {
+    width: 28px; height: 28px; border: 0; border-radius: 50%;
+    background: rgba(255,255,255,.18); color: #fff; font-size: 16px; line-height: 1;
+  }
+  .stepper span { min-width: 18px; text-align: center; font-weight: 500; animation: pop .35s var(--ease); }
+  @keyframes pop { from { transform: scale(1.4); } to { transform: none; } }
+
+  /* Bottom bar */
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 14px 18px calc(14px + env(safe-area-inset-bottom));
+    background: var(--ink); color: #f7f1e6;
+    transform: translateY(100%);
+    transition: transform .5s var(--ease);
+    box-shadow: 0 -10px 30px -12px rgba(0,0,0,.4);
+  }
+  .bar.show { transform: none; }
+  .bar small { display: block; opacity: .7; font-size: 12px; }
+  .bar strong { font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.4rem; font-weight: 600; }
+  .bar button {
+    padding: 12px 22px; border: 0; border-radius: 999px;
+    background: var(--gold); color: var(--ink);
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    transition: transform .2s var(--ease);
+  }
+  .bar button:active { transform: scale(.97); }
+
+  /* Order sheet */
+  dialog {
+    width: min(520px, 100%);
+    max-height: 85vh;
+    margin: auto auto 0;
+    padding: 24px 22px 22px;
+    border: 0; border-radius: 22px 22px 0 0;
+    background: var(--card); color: var(--ink);
+    box-shadow: 0 -20px 50px -20px rgba(0,0,0,.4);
+  }
+  dialog::backdrop { background: rgba(20, 14, 12, .5); animation: fadeIn .3s ease; }
+  dialog[open] { animation: slideUp .45s var(--ease); }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+  dialog h2 { margin: 0 0 12px; font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.6rem; color: var(--accent); }
+  .lines { list-style: none; margin: 0; padding: 0; max-height: 40vh; overflow-y: auto; }
+  .lines li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .lines li span:last-child { white-space: nowrap; }
+  .total { display: flex; justify-content: space-between; margin: 14px 0; font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.3rem; font-weight: 600; }
+  dialog input {
+    width: 100%; padding: 12px 14px; margin-bottom: 12px;
+    border: 1px solid var(--line); border-radius: 12px; background: #fff;
+  }
+  dialog input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(122,36,52,.22); }
+  .sheet-actions { display: flex; gap: 10px; }
+  .sheet-actions a, .sheet-actions button {
+    flex: 1; text-align: center; padding: 13px; border-radius: 999px; text-decoration: none;
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+  }
+  .sheet-actions a { background: #25d366; color: #fff; }
+  .sheet-actions button { border: 1px solid var(--line); background: transparent; }
+
+  .sign {
+    display: flex; flex-direction: column; align-items: flex-start;
+    margin: 18px 8px 0 22px;
+    font-family: "Great Vibes", cursive;
+    font-size: clamp(2rem, 5vw, 2.7rem);
+    line-height: 1.05;
+    color: var(--ink);
+  }
+  .sign span { display: block; }
+  .foot { text-align: center; margin: 18px 18px 0; font-size: 12px; color: var(--soft); letter-spacing: .06em; }
+  .owner-link { text-align: center; margin: 18px 0 0; }
+  .owner-link button {
+    padding: 9px 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--soft);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .owner-link button:active { transform: scale(.97); }
+  .float-actions {
+    position: fixed; right: 16px; z-index: 35;
+    bottom: calc(18px + env(safe-area-inset-bottom));
+    display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+  }
+  body:has(#bar.show) .float-actions { bottom: calc(92px + env(safe-area-inset-bottom)); }
+  .float-actions button {
+    padding: 11px 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    box-shadow: 0 10px 24px -14px rgba(36, 48, 40, .7);
+  }
+  .float-actions button:active { transform: scale(.97); }
+  body.mode-admin .float-actions { display: none !important; }
+
+  /* Owner editor — hidden from customers */
+  body.mode-admin { padding: 0 0 0; }
+  body.mode-admin .board,
+  body.mode-admin > #bar { display: none !important; }
+  .admin-wrap { max-width: 860px; margin: 0 auto; padding: 8px 18px 128px; }
+  .owner-bar {
+    position: sticky; top: 0; z-index: 30;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    margin: 0 -18px 8px;
+    padding: 10px 18px 8px;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(10px);
+  }
+  .owner-nav {
+    flex: 1 1 100%; order: 2; min-width: 0;
+    display: flex; gap: 6px; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .owner-nav::-webkit-scrollbar { display: none; }
+  .owner-nav a {
+    flex: none;
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .owner-tools { display: flex; gap: 6px; margin-left: auto; }
+  .gate, .panel, .cat-card {
+    margin-top: 14px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 18px;
+  }
+  .gate { max-width: 420px; margin: 28px auto 0; padding: 28px 24px 24px; }
+  .gate h2, .panel-head h2 {
+    margin: 0;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .gate h2 { font-size: 2.2rem; }
+  .panel-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: start;
+    margin-bottom: 14px;
+  }
+  .step-no {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 600;
+    font-variant-numeric: lining-nums;
+    font-size: 1.35rem;
+    letter-spacing: .08em;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .panel-head p, .hint { margin: 2px 0 0; color: var(--soft); font-size: 13px; line-height: 1.45; }
+  .hint { margin: 0; }
+  .form-grid, .stack { display: grid; gap: 12px; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .lbl { display: grid; gap: 6px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--soft); }
+  .admin-wrap input, .admin-wrap textarea {
+    width: 100%; padding: 11px 12px;
+    border: 1px solid var(--line); border-radius: 12px; background: #fff;
+  }
+  .admin-wrap textarea { min-height: 72px; resize: vertical; }
+  .admin-wrap input:focus, .admin-wrap textarea:focus {
+    outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(122,36,52,.22);
+  }
+  .err { margin: 8px 0 0; min-height: 1.2em; color: var(--accent); font-size: 13px; }
+  .gold-btn, .ghost-btn, .line-btn, .danger, .adder {
+    border-radius: 999px; padding: 11px 16px;
+    font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+  }
+  .gold-btn { border: 0; background: var(--ink); color: var(--paper); }
+  .gate .gold-btn { width: 100%; margin-top: 6px; }
+  .line-btn { border: 1px solid var(--line); background: #fff; color: var(--ink); }
+  .danger { border: 0; background: transparent; color: var(--accent); padding-inline: 8px; letter-spacing: .04em; }
+  .adder {
+    width: 100%; margin-top: 12px;
+    border: 1px dashed #c9aaa8; border-radius: 14px;
+    background: transparent; color: var(--accent);
+  }
+  .cat-card { scroll-margin-top: 108px; padding-bottom: 14px; }
+  .panel { scroll-margin-top: 108px; }
+  .cat-card-head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 10px 12px;
+    align-items: end;
+    padding-bottom: 12px; border-bottom: 1px solid var(--line);
+  }
+  .cat-card-head .pair { min-width: 0; }
+  .cat-card-head input {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 1.35rem; font-weight: 600; color: var(--ink);
+  }
+  .cat-side { display: flex; align-items: center; gap: 4px; padding-bottom: 4px; }
+  .cat-count { color: var(--soft); font-size: 12px; letter-spacing: .04em; white-space: nowrap; }
+  .empty-note { margin: 12px 0 0; color: var(--soft); font-size: 13px; }
+  .dish { border-bottom: 1px solid var(--line); }
+  .dish-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 2px;
+    border: 0; border-radius: 0;
+    background: transparent;
+    text-align: left;
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 15px;
+  }
+  .edit-photo {
+    width: 56px; height: 56px; border-radius: 12px; object-fit: cover; background: #f0e4e1;
+  }
+  img.edit-photo:not([src]) { opacity: .35; }
+  .dish-title { display: grid; gap: 2px; min-width: 0; }
+  .dish-title strong {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 1.28rem; font-weight: 600; line-height: 1.1;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .dish-title small { color: var(--soft); font-size: 12px; letter-spacing: .02em; }
+  .chev { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+  .dish.open .chev { color: var(--soft); }
+  .dish-body { display: none; gap: 12px; padding: 2px 2px 16px 68px; }
+  .dish.open .dish-body { display: grid; }
+  .dish-meta { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+  .price-lbl { width: 140px; }
+  .pic-btn { display: inline-flex; align-items: center; margin-bottom: 1px; }
+  .check-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .check {
+    position: relative;
+    display: inline-flex; align-items: center;
+    padding: 7px 12px;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: #fff;
+    font-size: 12px; letter-spacing: .04em; text-transform: none; color: var(--ink);
+  }
+  .check input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; }
+  .check:has(input:checked) { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .dish-foot { display: flex; justify-content: flex-end; }
+  .file-input { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+  .owner-reset { display: flex; justify-content: center; margin-top: 18px; }
+  .savebar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    display: flex; align-items: center; justify-content: flex-end; gap: 12px;
+    padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+    background: var(--ink);
+  }
+  .savebar .status { margin-right: auto; color: var(--gold); font-size: 13px; }
+  .savebar .gold-btn { background: var(--gold); color: var(--ink); }
+  .ghost-btn { border: 1px solid rgba(247,241,230,.35); background: transparent; color: #f7f1e6; }
+  @media (max-width: 640px) {
+    .owner-top { align-items: flex-start; flex-direction: column; }
+    .owner-note { text-align: left; }
+    .pair, .dish-body { grid-template-columns: 1fr; }
+    .cat-card-head { grid-template-columns: auto 1fr; }
+    .cat-card-head .step-no { grid-row: 1; }
+    .cat-side { grid-row: 1; grid-column: 2; justify-self: end; }
+    .cat-card-head .pair { grid-column: 1 / -1; }
+    .dish-body { padding-left: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .item { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="board">
+<svg class="sprig sprig-a" viewBox="0 0 100 64" aria-hidden="true"><g fill="none" stroke="#6b2030" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M12 58C30 50 42 36 62 14"/><path d="M30 50C18 44 16 32 28 30 22 40 24 48 30 50Z"/><path d="M44 36C34 30 36 18 48 18 42 26 42 34 44 36Z"/><path d="M56 22C50 14 58 6 68 10 60 14 56 20 56 22Z"/></g></svg>
+<svg class="sprig sprig-b" viewBox="0 0 100 64" aria-hidden="true"><g fill="none" stroke="#6b2030" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M12 58C30 50 42 36 62 14"/><path d="M30 50C18 44 16 32 28 30 22 40 24 48 30 50Z"/><path d="M44 36C34 30 36 18 48 18 42 26 42 34 44 36Z"/><path d="M56 22C50 14 58 6 68 10 60 14 56 20 56 22Z"/></g></svg>
+
+<header class="hero">
+  <p class="kicker" id="restaurant"></p>
+  <h1>Menu</h1>
+  <div class="ornament" aria-hidden="true">
+    <span></span>
+    <svg viewBox="0 0 28 18"><g fill="none" stroke="#6b2030" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15c5-2 8-6 12-12"/><path d="M12 13C7 11 6 6 11 5 9 9 10 12 12 13Z"/></g></svg>
+    <span></span>
+  </div>
+  <p class="aside" id="tagline"></p>
+  <small id="hours"></small>
+  <div class="langs" id="langs" role="group" aria-label="Language">
+    <button type="button" data-lang="en">EN</button>
+    <button type="button" data-lang="ms">BM</button>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs" aria-label="Kategori menu"></nav>
+
+<main id="menu"></main>
+
+<p class="sign" id="sign"></p>
+<p class="foot" id="foot">Harga termasuk cukai perkhidmatan. Sila maklumkan alahan makanan kepada pelayan.</p>
+<p class="owner-link"><button id="ownerBtn" type="button">Pemilik</button></p>
+</div>
+
+<div class="float-actions">
+  <button id="toTop" type="button" hidden>Atas</button>
+  <button id="ownerFloat" type="button">Pemilik</button>
+</div>
+
+<div class="bar" id="bar">
+  <div>
+    <small id="barCount">0 item</small>
+    <strong id="barTotal">RM 0.00</strong>
+  </div>
+  <button id="viewOrder" type="button">Lihat pesanan</button>
+</div>
+
+<dialog id="sheet">
+  <h2 id="sheetTitle">Pesanan anda</h2>
+  <ul class="lines" id="lines"></ul>
+  <div class="total"><span id="totalLabel">Jumlah</span><span id="sheetTotal">RM 0.00</span></div>
+  <input id="customer" placeholder="Nama / No. meja" autocomplete="off">
+  <div class="sheet-actions">
+    <a id="sendWa" href="#" target="_blank" rel="noopener">Hantar di WhatsApp</a>
+    <button id="closeSheet" type="button">Tutup</button>
+  </div>
+</dialog>
+
+<div id="admin" hidden>
+  <header class="owner-top">
+    <div>
+      <p class="owner-kicker">Pemilik</p>
+      <h1>Urus menu</h1>
+    </div>
+    <p class="owner-note">Pelanggan tidak nampak halaman ini dan tidak boleh mengubah menu.</p>
+  </header>
+  <div class="admin-wrap">
+    <form id="gate" class="gate">
+      <p class="owner-kicker">Langkah 1</p>
+      <h2>Masuk</h2>
+      <p class="hint">Masukkan PIN pemilik. PIN asal ialah 1234.</p>
+      <label class="lbl">PIN
+        <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" required>
+      </label>
+      <p class="err" id="pinErr"></p>
+      <button class="gold-btn" type="submit">Masuk</button>
+    </form>
+    <div id="editor" hidden></div>
+  </div>
+</div>
+
+<script>
+  /* Starting menu. The owner page (?admin) saves changes in this browser. */
+  const DEFAULT_MENU = {
+    restaurant: "Restoran Contoh",
+    tagline: "Masakan rumah, dimasak dengan kasih",
+    taglineEn: "Home cooking, made with care",
+    hours: "Setiap hari · 10.00 pagi – 10.00 malam",
+    hoursEn: "Every day · 10.00 am – 10.00 pm",
+    whatsapp: "60112345678",           // country code + number, no + or spaces
+    categories: [
+      {
+        id: "pembuka", name: "Pembuka Selera", nameEn: "Starters",
+        items: [
+          { id: "p1", name: "Kerabu Mangga", nameEn: "Mango Salad", desc: "Mangga muda, kacang tanah, cili padi dan limau kasturi.", descEn: "Young mango, peanuts, bird's eye chili and calamansi.", price: 12, tags: ["veg", "spicy"], image: "images/p1-kerabu-mangga.jpg" },
+          { id: "p2", name: "Popiah Basah", nameEn: "Fresh Spring Rolls", desc: "Sayur rebung, taugeh dan udang kering dalam kulit popiah.", descEn: "Bamboo shoot, bean sprouts and dried shrimp in a popiah skin.", price: 10, tags: [], image: "images/p2-popiah-basah.jpg" },
+          { id: "p3", name: "Sup Tomyam Ayam", nameEn: "Chicken Tom Yum", desc: "Sup asam pedas dengan daun limau purut.", descEn: "Hot and sour soup with kaffir lime leaves.", price: 14, tags: ["spicy"], image: "images/p3-sup-tomyam.jpg" }
+        ]
+      },
+      {
+        id: "utama", name: "Hidangan Utama", nameEn: "Mains",
+        items: [
+          { id: "u1", name: "Nasi Ayam Penyet", nameEn: "Smashed Fried Chicken Rice", desc: "Ayam goreng ditekan, sambal terung dan timun.", descEn: "Pressed fried chicken, eggplant sambal and cucumber.", price: 16, tags: ["spicy", "best"], image: "images/u1-nasi-ayam-penyet.jpg" },
+          { id: "u2", name: "Daging Rendang", nameEn: "Beef Rendang", desc: "Daging lembu dimasak lama dengan rempah pilihan.", descEn: "Beef slow-cooked with selected spices.", price: 26, tags: ["best"], image: "images/u2-daging-rendang.jpg" },
+          { id: "u3", name: "Ikan Masak Asam Pedas", nameEn: "Sour and Spicy Fish", desc: "Ikan siakap dengan asam jawa dan bendi.", descEn: "Sea bass with tamarind and okra.", price: 28, tags: ["spicy"], image: "images/u3-ikan-asam-pedas.jpg" },
+          { id: "u4", name: "Sayur Campur Lemak", nameEn: "Vegetables in Coconut Milk", desc: "Sayur tempatan dimasak santan.", descEn: "Local vegetables cooked in coconut milk.", price: 12, tags: ["veg"], image: "images/u4-sayur-lemak.jpg" }
+        ]
+      },
+      {
+        id: "minuman", name: "Minuman", nameEn: "Drinks",
+        items: [
+          { id: "m1", name: "Teh Tarik", nameEn: "Pulled Tea", desc: "Teh hitam dengan susu pekat.", descEn: "Black tea with condensed milk.", price: 4.5, tags: ["best"], image: "images/m1-teh-tarik.jpg" },
+          { id: "m2", name: "Air Sirap Bandung", nameEn: "Rose Milk", desc: "Susu dan sirap rose.", descEn: "Milk and rose syrup.", price: 5, tags: [], image: "images/m2-air-sirap.jpg" },
+          { id: "m3", name: "Air Kelapa Muda", nameEn: "Young Coconut", desc: "Kelapa muda segar.", descEn: "Fresh young coconut.", price: 7, tags: ["veg"], image: "images/m3-air-kelapa.jpg" }
+        ]
+      },
+      {
+        id: "pencuci", name: "Pencuci Mulut", nameEn: "Dessert",
+        items: [
+          { id: "d1", name: "Cendol", nameEn: "Cendol", desc: "Cendol pandan, santan dan gula melaka.", descEn: "Pandan cendol, coconut milk and palm sugar.", price: 6, tags: ["veg", "best"], image: "images/d1-cendol.jpg" },
+          { id: "d2", name: "Pisang Goreng", nameEn: "Fried Banana", desc: "Pisang emas bersalut tepung, dihidang panas.", descEn: "Honey bananas in batter, served hot.", price: 6, tags: ["veg"], image: "images/d2-pisang-goreng.jpg" }
+        ]
+      }
+    ]
+  };
+  const TAGS = { veg: "Vegetarian", spicy: "Pedas", best: "Popular" };
+  const STORE_KEY = "resto-menu-v1";
+  const PIN_KEY = "resto-pin";
+  const DEFAULT_PIN = "1234";
+
+  function storedMenu() {
+    try {
+      const data = JSON.parse(localStorage.getItem(STORE_KEY) || "");
+      if (!data || !Array.isArray(data.categories)) return null;
+      data.categories.forEach((c) => {
+        c.items = Array.isArray(c.items) ? c.items : [];
+        c.items.forEach((i) => {
+          i.price = Number(i.price) || 0;
+          i.tags = Array.isArray(i.tags) ? i.tags : [];
+        });
+      });
+      const byDefault = {};
+      DEFAULT_MENU.categories.forEach((c) => {
+        byDefault[c.id] = c;
+        c.items.forEach((i) => { byDefault[i.id] = i; });
+      });
+      if (!data.taglineEn) data.taglineEn = DEFAULT_MENU.taglineEn;
+      if (!data.hoursEn) data.hoursEn = DEFAULT_MENU.hoursEn;
+      data.categories.forEach((c) => {
+        if (byDefault[c.id] && !c.nameEn) c.nameEn = byDefault[c.id].nameEn;
+        c.items.forEach((i) => {
+          const src = byDefault[i.id];
+          if (!src) return;
+          if (!i.nameEn) i.nameEn = src.nameEn;
+          if (!i.descEn) i.descEn = src.descEn;
+        });
+      });
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+  const MENU = storedMenu() || DEFAULT_MENU;
+
+  const money = (n) => "RM " + n.toFixed(2);
+  const qty = {};
+  const cards = {};
+  const byId = {};
+  function refreshIndex() {
+    Object.keys(byId).forEach((id) => delete byId[id]);
+    MENU.categories.flatMap((c) => c.items).forEach((item) => { byId[item.id] = item; });
+  }
+
+  let lang = localStorage.getItem("resto-lang") === "en" ? "en" : "ms";
+  const UI = {
+    ms: {
+      add: "+ Tambah", less: "Kurang", more: "Tambah", viewOrder: "Lihat pesanan",
+      yourOrder: "Pesanan anda", total: "Jumlah", placeholder: "Nama / No. meja",
+      send: "Hantar di WhatsApp", close: "Tutup", owner: "Pemilik", top: "Atas",
+      foot: "Harga termasuk cukai perkhidmatan. Sila maklumkan alahan makanan kepada pelayan.",
+      order: "Pesanan", categories: "Kategori menu",
+      tags: { veg: "Vegetarian", spicy: "Pedas", best: "Popular" }
+    },
+    en: {
+      add: "+ Add", less: "Less", more: "Add", viewOrder: "View order",
+      yourOrder: "Your order", total: "Total", placeholder: "Name / Table no.",
+      send: "Send on WhatsApp", close: "Close", owner: "Owner", top: "Top",
+      foot: "Prices include service charge. Please tell your server about any allergies.",
+      order: "Order", categories: "Menu categories",
+      tags: { veg: "Vegetarian", spicy: "Spicy", best: "Popular" }
+    }
+  };
+  const t = (key) => UI[lang][key];
+  function L(entity, key) {
+    if (lang === "en" && entity[key + "En"]) return entity[key + "En"];
+    return entity[key] || "";
+  }
+  function countLabel(count) {
+    if (lang === "en") return count + (count === 1 ? " item" : " items");
+    return count + " item";
+  }
+
+  function phraseLines(text) {
+    return (text || "").split(",").map((s) => s.trim()).filter(Boolean);
+  }
+  function ingredientLine(text) {
+    const split = lang === "en" ? /\s*,\s*/ : /\s*,\s*|\s+dan\s+/i;
+    return (text || "")
+      .replace(/[.]+$/g, "")
+      .split(split)
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .join("   ·   ");
+  }
+  function fillPhrase(node, text) {
+    node.replaceChildren();
+    phraseLines(text).forEach((line, i) => {
+      if (i) {
+        const dot = document.createElement("span");
+        dot.className = "dot";
+        dot.textContent = "·";
+        node.appendChild(dot);
+      }
+      const span = document.createElement("span");
+      span.textContent = line;
+      node.appendChild(span);
+    });
+  }
+
+  const tabs = document.getElementById("tabs");
+  const main = document.getElementById("menu");
+  let spy;
+  let reveal;
+  function renderCustomer() {
+    document.documentElement.lang = lang === "en" ? "en" : "ms";
+    document.title = "Menu · " + MENU.restaurant;
+    document.getElementById("restaurant").textContent = MENU.restaurant;
+    fillPhrase(document.getElementById("tagline"), L(MENU, "tagline"));
+    document.getElementById("hours").textContent = L(MENU, "hours");
+    fillPhrase(document.getElementById("sign"), L(MENU, "tagline"));
+    document.getElementById("foot").textContent = t("foot");
+    document.getElementById("viewOrder").textContent = t("viewOrder");
+    document.getElementById("sheetTitle").textContent = t("yourOrder");
+    document.getElementById("totalLabel").textContent = t("total");
+    document.getElementById("customer").placeholder = t("placeholder");
+    document.getElementById("sendWa").textContent = t("send");
+    document.getElementById("closeSheet").textContent = t("close");
+    document.getElementById("ownerBtn").textContent = t("owner");
+    document.getElementById("ownerFloat").textContent = t("owner");
+    document.getElementById("toTop").textContent = t("top");
+    tabs.setAttribute("aria-label", t("categories"));
+    document.querySelectorAll("#langs button").forEach((btn) => {
+      const on = btn.dataset.lang === lang;
+      btn.classList.toggle("on", on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+
+    if (spy) spy.disconnect();
+    if (reveal) reveal.disconnect();
+    tabs.replaceChildren();
+    main.replaceChildren();
+    Object.keys(cards).forEach((id) => delete cards[id]);
+    refreshIndex();
+
+    let courseNo = 0;
+    MENU.categories.forEach((cat) => {
+      const tab = document.createElement("button");
+      tab.type = "button";
+      tab.textContent = L(cat, "name");
+      tab.dataset.target = cat.id;
+      tabs.appendChild(tab);
+
+      const sec = document.createElement("section");
+      sec.className = "cat";
+      sec.id = cat.id;
+      const h = document.createElement("h2");
+      h.textContent = L(cat, "name");
+      sec.appendChild(h);
+
+      cat.items.forEach((item) => {
+        courseNo += 1;
+        const el = document.createElement("article");
+        el.className = "item" + (courseNo % 2 === 0 ? " flip" : "");
+        el.dataset.id = item.id;
+
+        const info = document.createElement("div");
+        info.className = "info";
+        const num = document.createElement("span");
+        num.className = "num";
+        num.textContent = String(courseNo).padStart(2, "0");
+        const course = document.createElement("span");
+        course.className = "course";
+        course.textContent = L(cat, "name");
+        const name = document.createElement("h3");
+        name.textContent = L(item, "name");
+        const desc = document.createElement("p");
+        desc.textContent = ingredientLine(L(item, "desc"));
+        info.append(num, course, name, desc);
+        const labels = (item.tags || []).map((tag) => UI[lang].tags[tag] || tag);
+        if (labels.length) {
+          const tagWrap = document.createElement("div");
+          tagWrap.className = "tags";
+          tagWrap.textContent = labels.join("  ·  ");
+          info.appendChild(tagWrap);
+        }
+
+        const orderline = document.createElement("div");
+        orderline.className = "orderline";
+        const price = document.createElement("span");
+        price.className = "price";
+        price.textContent = money(item.price);
+        const ctrl = document.createElement("div");
+        ctrl.className = "ctrl";
+        orderline.append(price, ctrl);
+        info.appendChild(orderline);
+
+        const photo = document.createElement("img");
+        photo.className = "photo";
+        photo.alt = L(item, "name");
+        photo.loading = "lazy";
+        if (item.image) photo.src = item.image;
+
+        el.append(info, photo);
+        sec.appendChild(el);
+        cards[item.id] = el;
+        renderCtrl(item.id);
+      });
+
+      main.appendChild(sec);
+    });
+
+    spy = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const buttons = [...tabs.querySelectorAll("button")];
+        buttons.forEach((b) => b.classList.toggle("active", b.dataset.target === entry.target.id));
+        const active = tabs.querySelector(".active");
+        if (active) {
+          const left = active.offsetLeft - (tabs.clientWidth - active.offsetWidth) / 2;
+          tabs.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
+        }
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    document.querySelectorAll(".cat").forEach((s) => spy.observe(s));
+
+    reveal = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in");
+          reveal.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll(".item").forEach((el, i) => {
+      el.style.transitionDelay = (i % 4) * 0.06 + "s";
+      reveal.observe(el);
+    });
+    updateBar();
+  }
+
+  document.getElementById("langs").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-lang]");
+    if (!btn || btn.dataset.lang === lang) return;
+    lang = btn.dataset.lang;
+    localStorage.setItem("resto-lang", lang);
+    renderCustomer();
+  });
+  tabs.addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn || !btn.dataset.target) return;
+    document.getElementById(btn.dataset.target).scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  // Quantity controls
+  function renderCtrl(id) {
+    const ctrl = cards[id].querySelector(".ctrl");
+    const q = qty[id] || 0;
+    if (!q) {
+      ctrl.innerHTML = '<button class="add" type="button">' + t("add") + '</button>';
+    } else {
+      ctrl.innerHTML =
+        '<div class="stepper">' +
+        '<button type="button" data-d="-1" aria-label="' + t("less") + '">−</button>' +
+        '<span>' + q + '</span>' +
+        '<button type="button" data-d="1" aria-label="' + t("more") + '">+</button>' +
+        '</div>';
+    }
+  }
+  function change(id, d) {
+    qty[id] = Math.max(0, (qty[id] || 0) + d);
+    renderCtrl(id);
+    updateBar();
+  }
+  main.addEventListener("click", (e) => {
+    const card = e.target.closest(".item");
+    if (!card) return;
+    const id = card.dataset.id;
+    if (e.target.closest(".add")) change(id, 1);
+    const step = e.target.closest("[data-d]");
+    if (step) change(id, Number(step.dataset.d));
+  });
+
+  // Bottom bar
+  const bar = document.getElementById("bar");
+  function summary() {
+    const lines = Object.entries(qty).filter(([, q]) => q > 0).map(([id, q]) => ({ item: byId[id], q }));
+    const count = lines.reduce((s, l) => s + l.q, 0);
+    const total = lines.reduce((s, l) => s + l.q * l.item.price, 0);
+    return { lines, count, total };
+  }
+  function updateBar() {
+    const { count, total } = summary();
+    bar.classList.toggle("show", count > 0);
+    document.getElementById("barCount").textContent = countLabel(count);
+    document.getElementById("barTotal").textContent = money(total);
+    document.getElementById("barCount").style.animation = "none";
+    void document.getElementById("barCount").offsetWidth;
+    document.getElementById("barCount").style.animation = "";
+  }
+
+  // Order sheet
+  const sheet = document.getElementById("sheet");
+  const linesEl = document.getElementById("lines");
+  const customer = document.getElementById("customer");
+  const sendWa = document.getElementById("sendWa");
+
+  function buildOrderText() {
+    const { lines, total } = summary();
+    const who = customer.value.trim();
+    const body = lines.map((l) => l.q + "x " + L(l.item, "name") + " — " + money(l.item.price * l.q)).join("\n");
+    return t("order") + (who ? " (" + who + ")" : "") + ":\n" + body + "\n\n" + t("total") + ": " + money(total);
+  }
+  function updateSheetLink() {
+    sendWa.href = "https://wa.me/" + MENU.whatsapp + "?text=" + encodeURIComponent(buildOrderText());
+  }
+
+  document.getElementById("viewOrder").addEventListener("click", () => {
+    const { lines, total } = summary();
+    linesEl.innerHTML = "";
+    lines.forEach((l) => {
+      const li = document.createElement("li");
+      const a = document.createElement("span");
+      a.textContent = l.q + "x " + L(l.item, "name");
+      const b = document.createElement("span");
+      b.textContent = money(l.item.price * l.q);
+      li.append(a, b);
+      linesEl.appendChild(li);
+    });
+    document.getElementById("sheetTotal").textContent = money(total);
+    updateSheetLink();
+    sheet.showModal();
+  });
+  customer.addEventListener("input", updateSheetLink);
+  document.getElementById("closeSheet").addEventListener("click", () => sheet.close());
+  sheet.addEventListener("click", (e) => { if (e.target === sheet) sheet.close(); });
+  renderCustomer();
+
+  function openOwner() {
+    const url = new URL(location.href);
+    url.searchParams.set("admin", "1");
+    location.href = url.href;
+  }
+  document.getElementById("ownerBtn").addEventListener("click", openOwner);
+  document.getElementById("ownerFloat").addEventListener("click", openOwner);
+
+  const toTop = document.getElementById("toTop");
+  window.addEventListener("scroll", () => {
+    toTop.hidden = window.scrollY < 500;
+  }, { passive: true });
+  toTop.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  const isAdmin = new URLSearchParams(location.search).has("admin");
+  const openDishes = new Set();
+  if (isAdmin) initAdmin();
+
+  function getPin() {
+    return localStorage.getItem(PIN_KEY) || DEFAULT_PIN;
+  }
+  function initAdmin() {
+    document.body.classList.add("mode-admin");
+    document.getElementById("admin").hidden = false;
+    document.title = "Urus menu · " + (MENU.restaurant || "Menu");
+    document.getElementById("gate").addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (document.getElementById("pin").value === getPin()) {
+        sessionStorage.setItem("resto-admin", "1");
+        showEditor();
+      } else {
+        document.getElementById("pinErr").textContent = "PIN salah.";
+      }
+    });
+    document.getElementById("editor").addEventListener("click", onEditorClick);
+    document.getElementById("editor").addEventListener("change", onEditorChange);
+    document.getElementById("editor").addEventListener("input", onEditorInput);
+    if (sessionStorage.getItem("resto-admin") === "1") showEditor();
+  }
+  function showEditor() {
+    document.getElementById("gate").hidden = true;
+    document.getElementById("editor").hidden = false;
+    renderEditor();
+  }
+  function field(label, value, key, type) {
+    const lab = document.createElement("label");
+    lab.className = "lbl" + (key === "price" ? " price-lbl" : "");
+    lab.append(document.createTextNode(label));
+    const input = document.createElement(type === "area" ? "textarea" : "input");
+    if (type !== "area") input.type = type || "text";
+    if (key === "price") { input.inputMode = "decimal"; input.step = "0.01"; input.min = "0"; }
+    if (key === "whatsapp") input.inputMode = "tel";
+    input.dataset.key = key;
+    input.value = value == null ? "" : value;
+    lab.appendChild(input);
+    return lab;
+  }
+  function pair(a, b) {
+    const wrap = document.createElement("div");
+    wrap.className = "pair";
+    wrap.append(a, b);
+    return wrap;
+  }
+  function panelHead(title, text) {
+    const head = document.createElement("div");
+    head.className = "panel-head";
+    const copy = document.createElement("div");
+    const h = document.createElement("h2");
+    h.textContent = title;
+    const p = document.createElement("p");
+    p.textContent = text;
+    copy.append(h, p);
+    head.appendChild(copy);
+    return head;
+  }
+  function rm(n) {
+    const v = Number(n);
+    return "RM " + (Number.isFinite(v) ? v.toFixed(2) : "0.00");
+  }
+  function dishCard(item) {
+    const card = document.createElement("article");
+    card.className = "dish" + (openDishes.has(item.id) ? " open" : "");
+    card.dataset.item = item.id;
+    card.dataset.image = item.image || "";
+
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "dish-row";
+    toggle.dataset.act = "toggle";
+    const img = document.createElement("img");
+    img.className = "edit-photo";
+    img.alt = "";
+    if (item.image) img.src = item.image;
+    const title = document.createElement("span");
+    title.className = "dish-title";
+    const strong = document.createElement("strong");
+    strong.textContent = item.name || "Hidangan baharu";
+    const sub = document.createElement("small");
+    const bits = [];
+    if (item.nameEn) bits.push(item.nameEn);
+    bits.push(rm(item.price));
+    sub.textContent = bits.join(" · ");
+    title.append(strong, sub);
+    const chev = document.createElement("span");
+    chev.className = "chev";
+    chev.textContent = openDishes.has(item.id) ? "Tutup" : "Edit";
+    toggle.append(img, title, chev);
+
+    const body = document.createElement("div");
+    body.className = "dish-body";
+    body.append(
+      pair(field("Nama (BM)", item.name, "name"), field("Name (EN)", item.nameEn, "nameEn")),
+      pair(field("Penerangan (BM)", item.desc, "desc", "area"), field("Description (EN)", item.descEn, "descEn", "area"))
+    );
+    const meta = document.createElement("div");
+    meta.className = "dish-meta";
+    const file = document.createElement("input");
+    file.type = "file"; file.accept = "image/*"; file.className = "file-input";
+    file.dataset.act = "photo";
+    const picBtn = document.createElement("label");
+    picBtn.className = "line-btn pic-btn";
+    picBtn.textContent = "Tukar gambar";
+    picBtn.appendChild(file);
+    meta.append(field("Harga (RM)", item.price, "price", "number"), picBtn);
+    const checks = document.createElement("div");
+    checks.className = "check-row";
+    Object.entries(TAGS).forEach(([key, label]) => {
+      const lab = document.createElement("label");
+      lab.className = "check";
+      const box = document.createElement("input");
+      box.type = "checkbox"; box.dataset.tag = key; box.checked = (item.tags || []).includes(key);
+      lab.append(box, document.createTextNode(label));
+      checks.appendChild(lab);
+    });
+    const foot = document.createElement("div");
+    foot.className = "dish-foot";
+    const remove = document.createElement("button");
+    remove.type = "button"; remove.className = "danger"; remove.dataset.act = "del-item";
+    remove.textContent = "Padam hidangan";
+    foot.appendChild(remove);
+    body.append(meta, checks, foot);
+    card.append(toggle, body);
+    return card;
+  }
+  function renderEditor() {
+    const editor = document.getElementById("editor");
+    editor.replaceChildren();
+
+    const barNav = document.createElement("div");
+    barNav.className = "owner-bar";
+    const nav = document.createElement("nav");
+    nav.className = "owner-nav";
+    nav.setAttribute("aria-label", "Bahagian pemilik");
+    const jump = (href, label) => {
+      const a = document.createElement("a");
+      a.href = href;
+      a.textContent = label;
+      return a;
+    };
+    nav.appendChild(jump("#owner-info", "Restoran"));
+    MENU.categories.forEach((cat) => nav.appendChild(jump("#sec-" + cat.id, cat.name || "Kategori")));
+    nav.appendChild(jump("#owner-pin", "PIN"));
+    const tools = document.createElement("div");
+    tools.className = "owner-tools";
+    const view = document.createElement("button");
+    view.type = "button"; view.className = "line-btn"; view.dataset.act = "view";
+    view.textContent = "Lihat menu";
+    const logout = document.createElement("button");
+    logout.type = "button"; logout.className = "line-btn"; logout.dataset.act = "logout";
+    logout.textContent = "Keluar";
+    tools.append(view, logout);
+    barNav.append(nav, tools);
+    editor.appendChild(barNav);
+
+    const info = document.createElement("section");
+    info.className = "panel";
+    info.id = "owner-info";
+    const grid = document.createElement("div");
+    grid.className = "form-grid";
+    const wa = field("WhatsApp", MENU.whatsapp, "whatsapp");
+    wa.querySelector("input").placeholder = "60123456789";
+    grid.append(
+      field("Nama restoran", MENU.restaurant, "restaurant"),
+      pair(field("Tagline (BM)", MENU.tagline, "tagline"), field("Tagline (EN)", MENU.taglineEn, "taglineEn")),
+      pair(field("Waktu (BM)", MENU.hours, "hours"), field("Waktu (EN)", MENU.hoursEn, "hoursEn")),
+      wa
+    );
+    const waHint = document.createElement("p");
+    waHint.className = "hint";
+    waHint.textContent = "Nombor dengan kod negara, tanpa + atau ruang.";
+    info.append(panelHead("Restoran", "Nama, waktu dan nombor pesanan"), grid, waHint);
+    editor.appendChild(info);
+
+    MENU.categories.forEach((cat, index) => {
+      const sec = document.createElement("section");
+      sec.className = "cat-card";
+      sec.id = "sec-" + cat.id;
+      sec.dataset.cat = cat.id;
+      const head = document.createElement("div");
+      head.className = "cat-card-head";
+      const step = document.createElement("span");
+      step.className = "step-no";
+      step.textContent = String(index + 1).padStart(2, "0");
+      const names = pair(field("Kategori (BM)", cat.name, "catname"), field("Category (EN)", cat.nameEn || "", "catnameEn"));
+      const side = document.createElement("div");
+      side.className = "cat-side";
+      const count = document.createElement("span");
+      count.className = "cat-count";
+      count.textContent = cat.items.length + " hidangan";
+      const del = document.createElement("button");
+      del.type = "button"; del.className = "danger"; del.dataset.act = "del-cat";
+      del.textContent = "Padam";
+      side.append(count, del);
+      head.append(step, names, side);
+      sec.appendChild(head);
+
+      if (!cat.items.length) {
+        const empty = document.createElement("p");
+        empty.className = "empty-note";
+        empty.textContent = "Belum ada hidangan dalam kategori ini.";
+        sec.appendChild(empty);
+      }
+      cat.items.forEach((item) => sec.appendChild(dishCard(item)));
+
+      const add = document.createElement("button");
+      add.type = "button"; add.className = "adder"; add.dataset.act = "add-item";
+      add.textContent = "+ Hidangan";
+      sec.appendChild(add);
+      editor.appendChild(sec);
+    });
+
+    const addCat = document.createElement("button");
+    addCat.type = "button"; addCat.className = "adder"; addCat.dataset.act = "add-cat";
+    addCat.textContent = "+ Kategori";
+    editor.appendChild(addCat);
+
+    const pinPanel = document.createElement("section");
+    pinPanel.className = "panel";
+    pinPanel.id = "owner-pin";
+    const pinGrid = document.createElement("div");
+    pinGrid.className = "form-grid";
+    const pinField = field("PIN baharu", "", "newpin");
+    const pinInput = pinField.querySelector("input");
+    pinInput.id = "newPin";
+    pinInput.type = "password";
+    pinInput.autocomplete = "new-password";
+    pinInput.placeholder = "Sekurang-kurangnya 4 aksara";
+    const pinBtn = document.createElement("button");
+    pinBtn.type = "button"; pinBtn.className = "line-btn"; pinBtn.dataset.act = "pin";
+    pinBtn.textContent = "Tukar PIN";
+    const pinMsg = document.createElement("p");
+    pinMsg.className = "err"; pinMsg.id = "pinMsg";
+    pinGrid.append(pinField, pinBtn, pinMsg);
+    pinPanel.append(panelHead("PIN pemilik", "Hanya orang yang tahu PIN ini boleh mengubah menu"), pinGrid);
+    editor.appendChild(pinPanel);
+
+    const resetWrap = document.createElement("div");
+    resetWrap.className = "owner-reset";
+    const reset = document.createElement("button");
+    reset.type = "button"; reset.className = "danger"; reset.dataset.act = "reset";
+    reset.textContent = "Kembali ke menu asal";
+    resetWrap.appendChild(reset);
+    editor.appendChild(resetWrap);
+
+    const bar = document.createElement("div");
+    bar.className = "savebar";
+    const status = document.createElement("span");
+    status.className = "status"; status.id = "saveStatus";
+    const save = document.createElement("button");
+    save.type = "button"; save.className = "gold-btn"; save.dataset.act = "save";
+    save.textContent = "Simpan";
+    bar.append(status, save);
+    editor.appendChild(bar);
+  }
+  function readDraft() {
+    const root = document.getElementById("editor");
+    const value = (key) => {
+      const node = root.querySelector('.panel [data-key="' + key + '"]');
+      return node ? node.value.trim() : "";
+    };
+    return {
+      restaurant: value("restaurant"),
+      tagline: value("tagline"),
+      taglineEn: value("taglineEn"),
+      hours: value("hours"),
+      hoursEn: value("hoursEn"),
+      whatsapp: value("whatsapp").replace(/\D/g, ""),
+      categories: [...root.querySelectorAll("[data-cat]")].map((sec) => ({
+        id: sec.dataset.cat,
+        name: sec.querySelector("[data-key=catname]").value.trim(),
+        nameEn: sec.querySelector("[data-key=catnameEn]").value.trim(),
+        items: [...sec.querySelectorAll("[data-item]")].map((card) => ({
+          id: card.dataset.item,
+          name: card.querySelector("[data-key=name]").value.trim(),
+          nameEn: card.querySelector("[data-key=nameEn]").value.trim(),
+          desc: card.querySelector("[data-key=desc]").value.trim(),
+          descEn: card.querySelector("[data-key=descEn]").value.trim(),
+          price: Number(card.querySelector("[data-key=price]").value),
+          tags: [...card.querySelectorAll("[data-tag]:checked")].map((box) => box.dataset.tag),
+          image: card.dataset.image || ""
+        }))
+      }))
+    };
+  }
+  function compressImage(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error("read"));
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const max = 720;
+          const scale = Math.min(1, max / Math.max(img.width, img.height));
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.max(1, Math.round(img.width * scale));
+          canvas.height = Math.max(1, Math.round(img.height * scale));
+          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL("image/jpeg", 0.82));
+        };
+        img.onerror = () => reject(new Error("image"));
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  async function onEditorChange(e) {
+    const input = e.target;
+    if (input.dataset.act !== "photo" || !input.files || !input.files[0]) return;
+    const card = input.closest("[data-item]");
+    const status = document.getElementById("saveStatus");
+    try {
+      const url = await compressImage(input.files[0]);
+      card.dataset.image = url;
+      card.querySelector(".edit-photo").src = url;
+      if (status) status.textContent = "Gambar ditukar. Tekan Simpan.";
+    } catch (err) {
+      if (status) status.textContent = "Gambar tidak dapat dibaca.";
+    }
+  }
+  function onEditorInput(e) {
+    const card = e.target.closest("[data-item]");
+    if (!card) return;
+    const key = e.target.dataset.key;
+    if (key !== "name" && key !== "nameEn" && key !== "price") return;
+    const strong = card.querySelector(".dish-title strong");
+    const small = card.querySelector(".dish-title small");
+    const name = card.querySelector("[data-key=name]");
+    const nameEn = card.querySelector("[data-key=nameEn]");
+    const price = card.querySelector("[data-key=price]");
+    if (strong && name) strong.textContent = name.value.trim() || "Hidangan baharu";
+    if (small && price) {
+      const bits = [];
+      if (nameEn && nameEn.value.trim()) bits.push(nameEn.value.trim());
+      bits.push(rm(price.value));
+      small.textContent = bits.join(" · ");
+    }
+  }
+  function onEditorClick(e) {
+    const btn = e.target.closest("[data-act]");
+    if (!btn || btn.dataset.act === "photo") return;
+    const act = btn.dataset.act;
+    if (act === "toggle") {
+      const card = btn.closest("[data-item]");
+      const id = card.dataset.item;
+      const open = card.classList.toggle("open");
+      btn.querySelector(".chev").textContent = open ? "Tutup" : "Edit";
+      if (open) openDishes.add(id);
+      else openDishes.delete(id);
+      return;
+    }
+    if (act === "logout") {
+      sessionStorage.removeItem("resto-admin");
+      document.getElementById("editor").hidden = true;
+      document.getElementById("editor").replaceChildren();
+      document.getElementById("gate").hidden = false;
+      document.getElementById("pin").value = "";
+      return;
+    }
+    if (act === "view") {
+      const url = new URL(location.href);
+      url.searchParams.delete("admin");
+      location.href = url.href;
+      return;
+    }
+    if (act === "pin") {
+      const next = document.getElementById("newPin").value.trim();
+      const msg = document.getElementById("pinMsg");
+      if (next.length < 4) { msg.textContent = "PIN sekurang-kurangnya 4 aksara."; return; }
+      localStorage.setItem(PIN_KEY, next);
+      document.getElementById("newPin").value = "";
+      msg.textContent = "PIN ditukar.";
+      return;
+    }
+    if (act === "reset") {
+      if (!confirm("Buang perubahan dan guna menu asal?")) return;
+      localStorage.removeItem(STORE_KEY);
+      location.reload();
+      return;
+    }
+    if (act === "save") { saveDraft(); return; }
+
+    const data = readDraft();
+    if (act === "add-cat") {
+      data.categories.push({ id: "c" + Date.now(), name: "Kategori baharu", nameEn: "New category", items: [] });
+    } else if (act === "del-cat") {
+      const id = btn.closest("[data-cat]").dataset.cat;
+      if (!confirm("Padam kategori ini?")) return;
+      data.categories = data.categories.filter((c) => c.id !== id);
+    } else if (act === "add-item") {
+      const id = btn.closest("[data-cat]").dataset.cat;
+      const cat = data.categories.find((c) => c.id === id);
+      const itemId = "n" + Date.now();
+      openDishes.add(itemId);
+      cat.items.push({ id: itemId, name: "", nameEn: "", desc: "", descEn: "", price: 0, tags: [], image: "" });
+    } else if (act === "del-item") {
+      const catEl = btn.closest("[data-cat]");
+      const itemId = btn.closest("[data-item]").dataset.item;
+      const cat = data.categories.find((c) => c.id === catEl.dataset.cat);
+      cat.items = cat.items.filter((i) => i.id !== itemId);
+    } else return;
+
+    applyDraft(data);
+    renderEditor();
+    if (act === "add-item") {
+      const names = [...document.querySelectorAll("[data-key=name]")];
+      const empty = names.reverse().find((n) => !n.value);
+      if (empty) {
+        empty.focus();
+        const card = empty.closest("[data-item]");
+        if (card) card.scrollIntoView({ block: "center" });
+      }
+    }
+    if (act === "add-cat") {
+      const names = document.querySelectorAll("[data-key=catname]");
+      names[names.length - 1].focus();
+    }
+  }
+  function applyDraft(data) {
+    MENU.restaurant = data.restaurant;
+    MENU.tagline = data.tagline;
+    MENU.taglineEn = data.taglineEn;
+    MENU.hours = data.hours;
+    MENU.hoursEn = data.hoursEn;
+    MENU.whatsapp = data.whatsapp;
+    MENU.categories = data.categories;
+    refreshIndex();
+  }
+  function saveDraft() {
+    const data = readDraft();
+    const status = document.getElementById("saveStatus");
+    const missing = data.categories.some((c) => !c.name || c.items.some((i) => !i.name || !Number.isFinite(i.price) || i.price < 0));
+    if (!data.restaurant || missing) {
+      status.textContent = "Isi nama restoran, kategori, hidangan dan harga.";
+      return;
+    }
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(data));
+      applyDraft(data);
+      status.textContent = "Disimpan. Pelanggan pada peranti ini nampak menu baharu.";
+    } catch (err) {
+      status.textContent = "Gambar terlalu besar untuk disimpan.";
+    }
+  }
+</script>
+</body>
+</html>
