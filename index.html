@@ -41,26 +41,32 @@
     margin: 0 auto;
     background: var(--paper);
     overflow: hidden;
+    overflow: clip;
     animation: fadeDown .9s var(--ease) both;
   }
   .sprig { position: absolute; width: 108px; height: 70px; pointer-events: none; }
-  .sprig-a { top: 22px; left: 18px; }
+  .sprig-a { top: 22px; left: 18px; z-index: 1; }
   .sprig-b { right: 16px; bottom: 92px; transform: scaleX(-1); }
   @media (max-width: 720px) { .sprig-a, .sprig-b { display: none; } }
 
   /* Header */
   .hero {
     position: relative;
-    padding: 42px 24px 8px;
+    padding: 38px 24px 46px;
+    margin-bottom: 6px;
     text-align: center;
-    color: var(--ink);
-    background: transparent;
+    color: #f8efe9;
+    background: radial-gradient(90% 90% at 50% 0%, #8a3a48 0%, #6b2030 52%, #4a1421 100%);
+    border-radius: 0 0 50% 50% / 0 0 34px 34px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   .kicker {
     margin: 0;
     font-size: 12px;
     letter-spacing: .42em;
     text-transform: uppercase;
+    color: var(--gold);
   }
   .hero h1 {
     margin: 4px 0 0;
@@ -77,6 +83,8 @@
   }
   .ornament span { flex: 1; height: 1px; background: var(--ink); }
   .ornament svg { width: 34px; height: 20px; display: block; }
+  .hero .ornament span { background: rgba(228, 194, 184, .6); }
+  .hero .ornament svg g { stroke: var(--gold); }
   .aside {
     display: flex; flex-direction: column; align-items: center;
     max-width: 16rem;
@@ -88,7 +96,19 @@
     text-align: center;
   }
   .aside .dot { letter-spacing: 0; font-size: 14px; line-height: 1; }
-  .hero small { display: block; margin-top: 10px; color: var(--soft); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
+  .hero small {
+    display: inline-block; margin-top: 14px; padding: 7px 16px;
+    border: 1px solid rgba(228, 194, 184, .45); border-radius: 999px;
+    color: #f3dcd5; font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+  }
+  .hero .langs button { color: rgba(248, 239, 233, .65); }
+  .hero .langs button.on { color: #fff; border-color: var(--gold); }
+  .hero .socials a { border-color: rgba(228, 194, 184, .7); color: #f8efe9; }
+  .hero .socials a:hover, .hero .socials a:focus-visible { background: #f8efe9; color: var(--ink); border-color: #f8efe9; }
+  /* Grayscale text smoothing, avoids coloured fringes on Windows */
+  .hero > *, .board > .tabs, .board > main, .board > .sign, .board > .foot { opacity: .995; }
+  .hero h1 { color: #fff8f4; text-shadow: 0 6px 24px rgba(0, 0, 0, .25); }
+  .sprig-a g { stroke: rgba(228, 194, 184, .55); }
   .langs { display: flex; justify-content: center; gap: 6px; margin-top: 16px; }
   .langs button {
     border: 0; border-bottom: 1px solid transparent; background: transparent;
@@ -233,8 +253,9 @@
     display: flex; gap: 4px; justify-content: safe center;
     overflow-x: auto;
     padding: 14px 18px 6px;
-    background: rgba(246, 241, 231, .94);
+    background: rgba(248, 243, 240, .94);
     backdrop-filter: blur(8px);
+    box-shadow: 0 10px 18px -16px rgba(107, 32, 48, .5);
     scrollbar-width: none;
   }
   .tabs::-webkit-scrollbar { display: none; }
@@ -396,27 +417,40 @@
   .sheet-actions button { border: 1px solid var(--line); background: transparent; }
 
   .sign {
-    display: flex; flex-direction: column; align-items: flex-start;
-    margin: 18px 8px 0 22px;
+    display: flex; flex-direction: column; align-items: center;
+    margin: 44px 24px 0;
+    padding-top: 30px;
+    position: relative;
     font-family: "Great Vibes", cursive;
-    font-size: clamp(2rem, 5vw, 2.7rem);
-    line-height: 1.05;
+    font-size: clamp(2.1rem, 8vw, 2.9rem);
+    line-height: 1.1;
+    text-align: center;
     color: var(--ink);
   }
+  .sign::before {
+    content: "";
+    position: absolute; top: 0; left: 50%;
+    width: 64px; height: 1px;
+    transform: translateX(-50%);
+    background: var(--ink); opacity: .35;
+  }
   .sign span { display: block; }
-  .foot { text-align: center; margin: 18px 18px 0; font-size: 12px; color: var(--soft); letter-spacing: .06em; }
-  .owner-link { text-align: center; margin: 18px 0 0; }
-  .owner-link button {
+  .sign .dot { width: 6px; height: 6px; margin: 10px 0 8px; border-radius: 50%; background: var(--gold); font-size: 0; }
+  .foot { text-align: center; max-width: 24rem; margin: 22px auto 0; padding: 0 22px 44px; font-size: 12px; line-height: 1.6; color: var(--soft); letter-spacing: .05em; }
+  .owner-top-btn {
+    position: absolute; top: 14px; right: 14px; z-index: 2;
     padding: 9px 16px;
-    border: 1px solid var(--line);
+    border: 0;
     border-radius: 999px;
-    background: transparent;
-    color: var(--soft);
-    font-size: 11px;
+    background: linear-gradient(135deg, #ff7a59, #e8365d);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 500;
     letter-spacing: .14em;
     text-transform: uppercase;
+    box-shadow: 0 10px 22px -12px rgba(232, 54, 93, .9);
   }
-  .owner-link button:active { transform: scale(.97); }
+  .owner-top-btn:active { transform: scale(.97); }
   .float-actions {
     position: fixed; right: 16px; z-index: 35;
     bottom: calc(18px + env(safe-area-inset-bottom));
@@ -424,17 +458,31 @@
   }
   body:has(#bar.show) .float-actions { bottom: calc(92px + env(safe-area-inset-bottom)); }
   .float-actions button {
-    padding: 11px 16px;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    background: var(--paper);
-    color: var(--ink);
-    font-size: 11px;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    box-shadow: 0 10px 24px -14px rgba(36, 48, 40, .7);
+    width: 48px; height: 48px; padding: 0;
+    display: grid; place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #fff8f4;
+    box-shadow: 0 12px 26px -10px rgba(74, 20, 33, .8);
+    transition: transform .25s var(--ease), background .25s var(--ease);
   }
-  .float-actions button:active { transform: scale(.97); }
+  .float-actions button svg { width: 20px; height: 20px; display: block; }
+  .float-actions button:hover { background: var(--accent); transform: translateY(-2px); }
+  .float-actions button:active { transform: scale(.94); }
+
+  /* Social links */
+  .socials { display: flex; justify-content: center; gap: 12px; margin: 0 0 22px; }
+  .socials a {
+    width: 40px; height: 40px;
+    display: grid; place-items: center;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    color: var(--ink);
+    transition: background .25s var(--ease), color .25s var(--ease), transform .25s var(--ease);
+  }
+  .socials a:hover, .socials a:focus-visible { background: var(--ink); color: var(--paper); transform: translateY(-2px); }
+  .socials svg { width: 19px; height: 19px; display: block; }
   body.mode-admin .float-actions { display: none !important; }
 
   /* Owner editor — hidden from customers */
@@ -520,6 +568,7 @@
   }
   .gold-btn { border: 0; background: var(--ink); color: var(--paper); }
   .gate .gold-btn { width: 100%; margin-top: 6px; }
+  .gate .gate-back { width: 100%; margin-top: 10px; }
   .line-btn { border: 1px solid var(--line); background: #fff; color: var(--ink); }
   .danger { border: 0; background: transparent; color: var(--accent); padding-inline: 8px; letter-spacing: .04em; }
   .adder {
@@ -648,6 +697,8 @@
 <svg class="sprig sprig-b" viewBox="0 0 100 64" aria-hidden="true"><g fill="none" stroke="#6b2030" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M12 58C30 50 42 36 62 14"/><path d="M30 50C18 44 16 32 28 30 22 40 24 48 30 50Z"/><path d="M44 36C34 30 36 18 48 18 42 26 42 34 44 36Z"/><path d="M56 22C50 14 58 6 68 10 60 14 56 20 56 22Z"/></g></svg>
 
 <header class="hero">
+  <button class="owner-top-btn" id="ownerTop" type="button">Pemilik</button>
+  <nav class="socials" id="socials" aria-label="Social media" hidden></nav>
   <p class="kicker" id="restaurant"></p>
   <h1>Menu</h1>
   <div class="ornament" aria-hidden="true">
@@ -669,12 +720,12 @@
 
 <p class="sign" id="sign"></p>
 <p class="foot" id="foot">Harga termasuk cukai perkhidmatan. Sila maklumkan alahan makanan kepada pelayan.</p>
-<p class="owner-link"><button id="ownerBtn" type="button">Pemilik</button></p>
 </div>
 
 <div class="float-actions">
-  <button id="toTop" type="button" hidden>Atas</button>
-  <button id="ownerFloat" type="button">Pemilik</button>
+  <button id="toTop" type="button" aria-label="Atas" hidden>
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16V4M4.5 9.5 10 4l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
 </div>
 
 <div class="bar" id="bar">
@@ -714,6 +765,7 @@
       </label>
       <p class="err" id="pinErr"></p>
       <button class="gold-btn" type="submit">Masuk</button>
+      <button class="line-btn gate-back" id="gateBack" type="button">&larr; Kembali ke menu</button>
     </form>
     <div id="editor" hidden></div>
   </div>
@@ -729,7 +781,10 @@
     taglineEn: "Home cooking, made with care",
     hours: "Setiap hari · 10.00 pagi – 10.00 malam",
     hoursEn: "Every day · 10.00 am – 10.00 pm",
-    whatsapp: "60112345678",           // country code + number, no + or spaces
+    whatsapp: "601129858921",          // country code + number, no + or spaces
+    instagram: "https://www.instagram.com/",   // full link or @username
+    tiktok: "https://www.tiktok.com/",
+    facebook: "https://www.facebook.com/",
     categories: [
       {
         id: "pembuka", name: "Pembuka Selera", nameEn: "Starters",
@@ -786,6 +841,10 @@
         byDefault[c.id] = c;
         c.items.forEach((i) => { byDefault[i.id] = i; });
       });
+      if (!data.whatsapp || data.whatsapp === "60112345678") data.whatsapp = DEFAULT_MENU.whatsapp;
+      ["instagram", "tiktok", "facebook"].forEach((k) => {
+        if (data[k] === undefined) data[k] = DEFAULT_MENU[k];
+      });
       if (data.welcome === undefined) data.welcome = DEFAULT_MENU.welcome;
       if (data.welcomeEn === undefined) data.welcomeEn = DEFAULT_MENU.welcomeEn;
       if (!data.taglineEn) data.taglineEn = DEFAULT_MENU.taglineEn;
@@ -824,6 +883,7 @@
       send: "Hantar di WhatsApp", close: "Tutup", owner: "Pemilik", top: "Atas",
       foot: "Harga termasuk cukai perkhidmatan. Sila maklumkan alahan makanan kepada pelayan.",
       order: "Pesanan", categories: "Kategori menu",
+      greet: "Hai {name}, saya nak order:", from: "Nama / No. meja",
       tags: { veg: "Vegetarian", spicy: "Pedas", best: "Popular" }
     },
     en: {
@@ -833,6 +893,7 @@
       send: "Send on WhatsApp", close: "Close", owner: "Owner", top: "Top",
       foot: "Prices include service charge. Please tell your server about any allergies.",
       order: "Order", categories: "Menu categories",
+      greet: "Hi {name}, I would like to order:", from: "Name / Table no.",
       tags: { veg: "Vegetarian", spicy: "Spicy", best: "Popular" }
     }
   };
@@ -902,10 +963,49 @@
     }
     photos.hidden = !photos.children.length;
   }
+  const SOCIALS = {
+    instagram: {
+      label: "Instagram", base: "https://www.instagram.com/", user: (h) => h,
+      icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></svg>'
+    },
+    tiktok: {
+      label: "TikTok", base: "https://www.tiktok.com/", user: (h) => "@" + h,
+      icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3h-3.1v12.3a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V9.6a5.7 5.7 0 1 0 4.9 5.7V9a6.8 6.8 0 0 0 4 1.3V7.2A4 4 0 0 1 16.6 3Z"/></svg>'
+    },
+    facebook: {
+      label: "Facebook", base: "https://www.facebook.com/", user: (h) => h,
+      icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3Z"/></svg>'
+    }
+  };
+  function socialUrl(kind, value) {
+    const v = String(value || "").trim();
+    if (!v) return "";
+    if (/^https?:\/\//i.test(v)) return v;
+    const handle = v.replace(/^@/, "").replace(/^\/+/, "");
+    return handle ? SOCIALS[kind].base + SOCIALS[kind].user(handle) : "";
+  }
+  function renderSocials() {
+    const nav = document.getElementById("socials");
+    nav.replaceChildren();
+    Object.keys(SOCIALS).forEach((kind) => {
+      const url = socialUrl(kind, MENU[kind]);
+      if (!url) return;
+      const a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.setAttribute("aria-label", SOCIALS[kind].label);
+      a.title = SOCIALS[kind].label;
+      a.innerHTML = SOCIALS[kind].icon;
+      nav.appendChild(a);
+    });
+    nav.hidden = !nav.children.length;
+  }
   function renderCustomer() {
     document.documentElement.lang = lang === "en" ? "en" : "ms";
     document.title = "Menu · " + MENU.restaurant;
     renderWelcome();
+    renderSocials();
     document.getElementById("restaurant").textContent = MENU.restaurant;
     fillPhrase(document.getElementById("tagline"), L(MENU, "tagline"));
     document.getElementById("hours").textContent = L(MENU, "hours");
@@ -917,9 +1017,8 @@
     document.getElementById("customer").placeholder = t("placeholder");
     document.getElementById("sendWa").textContent = t("send");
     document.getElementById("closeSheet").textContent = t("close");
-    document.getElementById("ownerBtn").textContent = t("owner");
-    document.getElementById("ownerFloat").textContent = t("owner");
-    document.getElementById("toTop").textContent = t("top");
+    document.getElementById("ownerTop").textContent = t("owner");
+    document.getElementById("toTop").setAttribute("aria-label", t("top"));
     tabs.setAttribute("aria-label", t("categories"));
     document.querySelectorAll("[data-lang]").forEach((btn) => {
       const on = btn.dataset.lang === lang;
@@ -1130,7 +1229,8 @@
     const { lines, total } = summary();
     const who = customer.value.trim();
     const body = lines.map((l) => l.q + "x " + L(l.item, "name") + " — " + money(l.item.price * l.q)).join("\n");
-    return t("order") + (who ? " (" + who + ")" : "") + ":\n" + body + "\n\n" + t("total") + ": " + money(total);
+    const hello = t("greet").replace("{name}", MENU.restaurant);
+    return hello + "\n\n" + body + "\n\n" + t("total") + ": " + money(total) + (who ? "\n" + t("from") + ": " + who : "");
   }
   function updateSheetLink() {
     sendWa.href = "https://wa.me/" + MENU.whatsapp + "?text=" + encodeURIComponent(buildOrderText());
@@ -1162,8 +1262,7 @@
     url.searchParams.set("admin", "1");
     location.href = url.href;
   }
-  document.getElementById("ownerBtn").addEventListener("click", openOwner);
-  document.getElementById("ownerFloat").addEventListener("click", openOwner);
+  document.getElementById("ownerTop").addEventListener("click", openOwner);
 
   const toTop = document.getElementById("toTop");
   window.addEventListener("scroll", () => {
@@ -1192,6 +1291,11 @@
       } else {
         document.getElementById("pinErr").textContent = "PIN salah.";
       }
+    });
+    document.getElementById("gateBack").addEventListener("click", () => {
+      const url = new URL(location.href);
+      url.searchParams.delete("admin");
+      location.href = url.href;
     });
     document.getElementById("editor").addEventListener("click", onEditorClick);
     document.getElementById("editor").addEventListener("change", onEditorChange);
@@ -1339,18 +1443,26 @@
     const grid = document.createElement("div");
     grid.className = "form-grid";
     const wa = field("WhatsApp", MENU.whatsapp, "whatsapp");
-    wa.querySelector("input").placeholder = "60123456789";
+    wa.querySelector("input").placeholder = "601129858921";
+    const social = (label, key, ph) => {
+      const f = field(label, MENU[key], key);
+      f.querySelector("input").placeholder = ph;
+      return f;
+    };
     grid.append(
       field("Nama perniagaan (halaman depan)", MENU.restaurant, "restaurant"),
       pair(field("Sambutan (BM)", MENU.welcome, "welcome"), field("Welcome line (EN)", MENU.welcomeEn, "welcomeEn")),
       pair(field("Tagline (BM)", MENU.tagline, "tagline"), field("Tagline (EN)", MENU.taglineEn, "taglineEn")),
       pair(field("Waktu (BM)", MENU.hours, "hours"), field("Waktu (EN)", MENU.hoursEn, "hoursEn")),
-      wa
+      wa,
+      social("Instagram", "instagram", "@namaanda atau pautan"),
+      social("TikTok", "tiktok", "@namaanda atau pautan"),
+      social("Facebook", "facebook", "namahalaman atau pautan")
     );
     const waHint = document.createElement("p");
     waHint.className = "hint";
-    waHint.textContent = "Nombor dengan kod negara, tanpa + atau ruang.";
-    info.append(panelHead("Restoran dan halaman depan", "Nama perniagaan, sambutan, waktu dan nombor pesanan"), grid, waHint);
+    waHint.textContent = "WhatsApp: boleh tulis 011... atau 6011... (tanpa + atau ruang). Instagram, TikTok dan Facebook: tampal pautan penuh atau tulis nama pengguna. Kosongkan untuk sembunyikan ikon.";
+    info.append(panelHead("Restoran dan halaman depan", "Nama perniagaan, sambutan, waktu, WhatsApp dan pautan media sosial"), grid, waHint);
     editor.appendChild(info);
 
     MENU.categories.forEach((cat, index) => {
@@ -1448,7 +1560,10 @@
       taglineEn: value("taglineEn"),
       hours: value("hours"),
       hoursEn: value("hoursEn"),
-      whatsapp: value("whatsapp").replace(/\D/g, ""),
+      whatsapp: value("whatsapp").replace(/\D/g, "").replace(/^0/, "60"),
+      instagram: value("instagram"),
+      tiktok: value("tiktok"),
+      facebook: value("facebook"),
       categories: [...root.querySelectorAll("[data-cat]")].map((sec) => ({
         id: sec.dataset.cat,
         name: sec.querySelector("[data-key=catname]").value.trim(),
@@ -1608,6 +1723,9 @@
     MENU.hours = data.hours;
     MENU.hoursEn = data.hoursEn;
     MENU.whatsapp = data.whatsapp;
+    MENU.instagram = data.instagram;
+    MENU.tiktok = data.tiktok;
+    MENU.facebook = data.facebook;
     MENU.categories = data.categories;
     refreshIndex();
   }
