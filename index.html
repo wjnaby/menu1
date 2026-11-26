@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Menu digital restoran">
-<title>Menu · Restoran Contoh</title>
+<title>Menu · My Kitchen</title>
+<script>if (!/[?&]admin\b/.test(location.search)) document.documentElement.classList.add("welcome-on");</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Great+Vibes&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
@@ -102,6 +103,103 @@
     }
   }
   @keyframes fadeDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+  @keyframes boardRise { from { opacity: .35; transform: translateY(64px) scale(.985); } to { opacity: 1; transform: none; } }
+  .board.rise { animation: boardRise 1.05s var(--ease) both; }
+
+  /* Welcome (front) page */
+  #welcome { display: none; }
+  html.welcome-on #welcome, #welcome.leaving { display: grid; }
+  html.welcome-on, html.welcome-on body { overflow: hidden; height: 100%; }
+  .welcome {
+    position: fixed; inset: 0; z-index: 100;
+    place-items: center;
+    padding: 56px 24px calc(36px + env(safe-area-inset-bottom));
+    overflow: hidden;
+    color: #f8efe9;
+    background: radial-gradient(90% 70% at 50% 16%, #8a3a48 0%, #6b2030 46%, #3f1019 100%);
+    transition: transform 1.05s var(--ease), opacity .95s var(--ease);
+  }
+  .welcome.leaving { transform: translateY(-100%); opacity: .55; }
+  .welcome-sprig { position: absolute; width: 120px; height: 78px; opacity: .45; pointer-events: none; }
+  .welcome-sprig.a { top: 26px; left: 22px; }
+  .welcome-sprig.b { bottom: 26px; right: 22px; transform: scale(-1, -1); }
+  .welcome .langs { position: absolute; top: 18px; right: 18px; margin: 0; z-index: 2; }
+  .welcome .langs button { color: rgba(248, 239, 233, .7); }
+  .welcome .langs button.on { color: #fff; border-color: #fff; }
+  .welcome-inner {
+    position: relative;
+    width: min(600px, 100%);
+    display: grid; justify-items: center;
+    text-align: center;
+    transition: transform .8s var(--ease), opacity .6s var(--ease);
+  }
+  .welcome.leaving .welcome-inner { transform: translateY(-36px) scale(.97); opacity: 0; }
+  .welcome-photos { display: flex; justify-content: center; margin-bottom: 30px; }
+  .welcome-photos img {
+    width: clamp(74px, 22vw, 108px);
+    aspect-ratio: 1;
+    margin-left: -18px;
+    border-radius: 50%;
+    border: 3px solid #f8efe9;
+    object-fit: cover;
+    background: #8a3a48;
+    box-shadow: 0 16px 30px -14px rgba(0, 0, 0, .65);
+  }
+  .welcome-photos img:first-child { margin-left: 0; }
+  .welcome-inner > *:not(.welcome-photos), .welcome-photos img {
+    animation: welcomeUp .95s var(--ease) both;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes welcomeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+  .welcome-hi {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: .42em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .welcome h1 {
+    margin: 8px 0 0;
+    max-width: 100%;
+    font-family: "Great Vibes", "Cormorant Garamond", Georgia, cursive;
+    font-weight: 400;
+    font-size: clamp(3.6rem, 17vw, 7rem);
+    line-height: 1.04;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+  .welcome .ornament { width: min(240px, 70vw); margin-top: 16px; }
+  .welcome .ornament span { background: var(--gold); }
+  .welcome-tag {
+    margin: 20px 0 0;
+    max-width: 22rem;
+    font-size: 12px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    line-height: 1.7;
+    color: rgba(248, 239, 233, .85);
+  }
+  .enter {
+    margin-top: 36px;
+    display: inline-flex; align-items: center; gap: 14px;
+    padding: 16px 32px;
+    border: 1px solid var(--gold);
+    border-radius: 999px;
+    background: #f8efe9;
+    color: var(--ink);
+    font-size: 12px;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    transition: transform .25s var(--ease), background .3s, gap .3s var(--ease);
+  }
+  .enter svg { width: 20px; height: 12px; flex: none; }
+  .enter:hover { background: #fff; gap: 20px; }
+  .enter:active { transform: scale(.97); }
+  .welcome button:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+  @media (max-height: 560px) {
+    .welcome { padding-top: 48px; }
+    .welcome-photos { display: none; }
+  }
 
   .owner-top {
     max-width: 860px;
@@ -521,6 +619,30 @@
 </head>
 <body>
 
+<section class="welcome" id="welcome" aria-labelledby="welcomeName">
+  <svg class="welcome-sprig a" viewBox="0 0 100 64" aria-hidden="true"><g fill="none" stroke="#e4c2b8" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M12 58C30 50 42 36 62 14"/><path d="M30 50C18 44 16 32 28 30 22 40 24 48 30 50Z"/><path d="M44 36C34 30 36 18 48 18 42 26 42 34 44 36Z"/><path d="M56 22C50 14 58 6 68 10 60 14 56 20 56 22Z"/></g></svg>
+  <svg class="welcome-sprig b" viewBox="0 0 100 64" aria-hidden="true"><g fill="none" stroke="#e4c2b8" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M12 58C30 50 42 36 62 14"/><path d="M30 50C18 44 16 32 28 30 22 40 24 48 30 50Z"/><path d="M44 36C34 30 36 18 48 18 42 26 42 34 44 36Z"/><path d="M56 22C50 14 58 6 68 10 60 14 56 20 56 22Z"/></g></svg>
+  <div class="langs" id="welcomeLangs" role="group" aria-label="Language">
+    <button type="button" data-lang="en">EN</button>
+    <button type="button" data-lang="ms">BM</button>
+  </div>
+  <div class="welcome-inner">
+    <div class="welcome-photos" id="welcomePhotos" aria-hidden="true"></div>
+    <p class="welcome-hi" id="welcomeHi" style="--d:.15s"></p>
+    <h1 id="welcomeName" style="--d:.3s"></h1>
+    <div class="ornament" aria-hidden="true" style="--d:.45s">
+      <span></span>
+      <svg viewBox="0 0 28 18"><g fill="none" stroke="#e4c2b8" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15c5-2 8-6 12-12"/><path d="M12 13C7 11 6 6 11 5 9 9 10 12 12 13Z"/></g></svg>
+      <span></span>
+    </div>
+    <p class="welcome-tag" id="welcomeTag" style="--d:.55s"></p>
+    <button class="enter" id="enterMenu" type="button" style="--d:.7s">
+      <span id="enterLabel">Lihat menu</span>
+      <svg viewBox="0 0 20 12" aria-hidden="true"><path d="M1 6h17M13 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</section>
+
 <div class="board">
 <svg class="sprig sprig-a" viewBox="0 0 100 64" aria-hidden="true"><g fill="none" stroke="#6b2030" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M12 58C30 50 42 36 62 14"/><path d="M30 50C18 44 16 32 28 30 22 40 24 48 30 50Z"/><path d="M44 36C34 30 36 18 48 18 42 26 42 34 44 36Z"/><path d="M56 22C50 14 58 6 68 10 60 14 56 20 56 22Z"/></g></svg>
 <svg class="sprig sprig-b" viewBox="0 0 100 64" aria-hidden="true"><g fill="none" stroke="#6b2030" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M12 58C30 50 42 36 62 14"/><path d="M30 50C18 44 16 32 28 30 22 40 24 48 30 50Z"/><path d="M44 36C34 30 36 18 48 18 42 26 42 34 44 36Z"/><path d="M56 22C50 14 58 6 68 10 60 14 56 20 56 22Z"/></g></svg>
@@ -600,7 +722,9 @@
 <script>
   /* Starting menu. The owner page (?admin) saves changes in this browser. */
   const DEFAULT_MENU = {
-    restaurant: "Restoran Contoh",
+    restaurant: "My Kitchen",
+    welcome: "Selamat datang ke",
+    welcomeEn: "Welcome to",
     tagline: "Masakan rumah, dimasak dengan kasih",
     taglineEn: "Home cooking, made with care",
     hours: "Setiap hari · 10.00 pagi – 10.00 malam",
@@ -662,6 +786,8 @@
         byDefault[c.id] = c;
         c.items.forEach((i) => { byDefault[i.id] = i; });
       });
+      if (data.welcome === undefined) data.welcome = DEFAULT_MENU.welcome;
+      if (data.welcomeEn === undefined) data.welcomeEn = DEFAULT_MENU.welcomeEn;
       if (!data.taglineEn) data.taglineEn = DEFAULT_MENU.taglineEn;
       if (!data.hoursEn) data.hoursEn = DEFAULT_MENU.hoursEn;
       data.categories.forEach((c) => {
@@ -692,6 +818,7 @@
   let lang = localStorage.getItem("resto-lang") === "en" ? "en" : "ms";
   const UI = {
     ms: {
+      enter: "Lihat menu",
       add: "+ Tambah", less: "Kurang", more: "Tambah", viewOrder: "Lihat pesanan",
       yourOrder: "Pesanan anda", total: "Jumlah", placeholder: "Nama / No. meja",
       send: "Hantar di WhatsApp", close: "Tutup", owner: "Pemilik", top: "Atas",
@@ -700,6 +827,7 @@
       tags: { veg: "Vegetarian", spicy: "Pedas", best: "Popular" }
     },
     en: {
+      enter: "View menu",
       add: "+ Add", less: "Less", more: "Add", viewOrder: "View order",
       yourOrder: "Your order", total: "Total", placeholder: "Name / Table no.",
       send: "Send on WhatsApp", close: "Close", owner: "Owner", top: "Top",
@@ -749,9 +877,35 @@
   const main = document.getElementById("menu");
   let spy;
   let reveal;
+  function renderWelcome() {
+    const hi = document.getElementById("welcomeHi");
+    hi.textContent = L(MENU, "welcome");
+    hi.hidden = !hi.textContent;
+    document.getElementById("welcomeName").textContent = MENU.restaurant;
+    const tag = document.getElementById("welcomeTag");
+    tag.textContent = L(MENU, "tagline");
+    tag.hidden = !tag.textContent;
+    document.getElementById("enterLabel").textContent = t("enter");
+    const photos = document.getElementById("welcomePhotos");
+    if (!photos.children.length) {
+      MENU.categories
+        .map((c) => c.items.find((i) => i.image))
+        .filter(Boolean)
+        .slice(0, 3)
+        .forEach((item, i) => {
+          const img = document.createElement("img");
+          img.alt = "";
+          img.src = item.image;
+          img.style.setProperty("--d", (0.05 + i * 0.1) + "s");
+          photos.appendChild(img);
+        });
+    }
+    photos.hidden = !photos.children.length;
+  }
   function renderCustomer() {
     document.documentElement.lang = lang === "en" ? "en" : "ms";
     document.title = "Menu · " + MENU.restaurant;
+    renderWelcome();
     document.getElementById("restaurant").textContent = MENU.restaurant;
     fillPhrase(document.getElementById("tagline"), L(MENU, "tagline"));
     document.getElementById("hours").textContent = L(MENU, "hours");
@@ -767,7 +921,7 @@
     document.getElementById("ownerFloat").textContent = t("owner");
     document.getElementById("toTop").textContent = t("top");
     tabs.setAttribute("aria-label", t("categories"));
-    document.querySelectorAll("#langs button").forEach((btn) => {
+    document.querySelectorAll("[data-lang]").forEach((btn) => {
       const on = btn.dataset.lang === lang;
       btn.classList.toggle("on", on);
       btn.setAttribute("aria-pressed", on ? "true" : "false");
@@ -876,13 +1030,43 @@
     updateBar();
   }
 
-  document.getElementById("langs").addEventListener("click", (e) => {
+  function pickLang(e) {
     const btn = e.target.closest("[data-lang]");
     if (!btn || btn.dataset.lang === lang) return;
     lang = btn.dataset.lang;
     localStorage.setItem("resto-lang", lang);
     renderCustomer();
-  });
+  }
+  document.getElementById("langs").addEventListener("click", pickLang);
+  document.getElementById("welcomeLangs").addEventListener("click", pickLang);
+
+  // Front page: slides up to reveal the menu
+  const welcome = document.getElementById("welcome");
+  const lockables = [document.querySelector(".board"), document.querySelector(".float-actions"), document.getElementById("bar")];
+  const setLocked = (on) => lockables.forEach((el) => { if (el) el.inert = on; });
+  if (document.documentElement.classList.contains("welcome-on")) setLocked(true);
+  else welcome.hidden = true;
+  function enterMenu() {
+    const root = document.documentElement;
+    if (!root.classList.contains("welcome-on")) return;
+    root.classList.remove("welcome-on");
+    setLocked(false);
+    window.scrollTo(0, 0);
+    lockables[0].classList.add("rise");
+    welcome.classList.add("leaving");
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      welcome.hidden = true;
+      welcome.classList.remove("leaving");
+    };
+    welcome.addEventListener("transitionend", (e) => {
+      if (e.target === welcome && e.propertyName === "transform") finish();
+    });
+    setTimeout(finish, 1400);
+  }
+  document.getElementById("enterMenu").addEventListener("click", enterMenu);
   tabs.addEventListener("click", (e) => {
     const btn = e.target.closest("button");
     if (!btn || !btn.dataset.target) return;
@@ -1157,7 +1341,8 @@
     const wa = field("WhatsApp", MENU.whatsapp, "whatsapp");
     wa.querySelector("input").placeholder = "60123456789";
     grid.append(
-      field("Nama restoran", MENU.restaurant, "restaurant"),
+      field("Nama perniagaan (halaman depan)", MENU.restaurant, "restaurant"),
+      pair(field("Sambutan (BM)", MENU.welcome, "welcome"), field("Welcome line (EN)", MENU.welcomeEn, "welcomeEn")),
       pair(field("Tagline (BM)", MENU.tagline, "tagline"), field("Tagline (EN)", MENU.taglineEn, "taglineEn")),
       pair(field("Waktu (BM)", MENU.hours, "hours"), field("Waktu (EN)", MENU.hoursEn, "hoursEn")),
       wa
@@ -1165,7 +1350,7 @@
     const waHint = document.createElement("p");
     waHint.className = "hint";
     waHint.textContent = "Nombor dengan kod negara, tanpa + atau ruang.";
-    info.append(panelHead("Restoran", "Nama, waktu dan nombor pesanan"), grid, waHint);
+    info.append(panelHead("Restoran dan halaman depan", "Nama perniagaan, sambutan, waktu dan nombor pesanan"), grid, waHint);
     editor.appendChild(info);
 
     MENU.categories.forEach((cat, index) => {
@@ -1257,6 +1442,8 @@
     };
     return {
       restaurant: value("restaurant"),
+      welcome: value("welcome"),
+      welcomeEn: value("welcomeEn"),
       tagline: value("tagline"),
       taglineEn: value("taglineEn"),
       hours: value("hours"),
@@ -1414,6 +1601,8 @@
   }
   function applyDraft(data) {
     MENU.restaurant = data.restaurant;
+    MENU.welcome = data.welcome;
+    MENU.welcomeEn = data.welcomeEn;
     MENU.tagline = data.tagline;
     MENU.taglineEn = data.taglineEn;
     MENU.hours = data.hours;
