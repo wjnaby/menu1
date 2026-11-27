@@ -607,7 +607,18 @@ const DEFAULT_MENU = {
   instagram: "https://www.instagram.com/",
   tiktok: "https://www.tiktok.com/",
   facebook: "https://www.facebook.com/",
-  categories: []
+  categories: [
+    { id: "dessert", name: "Pencuci Mulut", nameEn: "Dessert", items: [
+      { id: "banana-pudding", name: "Banana Pudding", nameEn: "Banana Pudding", desc: "", descEn: "", price: 5, tags: [], image: "images/BANAN%20PUDING.jpg" },
+      { id: "popis-bites", name: "Popis Bites", nameEn: "Popis Bites", desc: "", descEn: "", price: 7, tags: [], image: "images/POPIS%20BITES.jpg" },
+      { id: "waffle", name: "Waffle", nameEn: "Waffle", desc: "", descEn: "", price: 5, tags: [], image: "images/waffle.jpg" },
+      { id: "churros", name: "Churros", nameEn: "Churros", desc: "", descEn: "", price: 6, tags: [], image: "images/churros.jpg" }
+    ]},
+    { id: "savoury", name: "Masin", nameEn: "Savoury", items: [
+      { id: "wanpaku", name: "Wanpaku", nameEn: "Wanpaku", desc: "", descEn: "", price: 15, tags: [], image: "images/WANPAKU.jpg" },
+      { id: "vietnam-rolls", name: "Vietnam Rolls", nameEn: "Vietnam Rolls", desc: "", descEn: "", price: 3, tags: [], image: "images/VIETNAM%20ROLLS.jpg" }
+    ]}
+  ]
 };
 /* Preview only: open the page with ?demo to see sample dishes */
 const DEMO_CATEGORIES = [
@@ -626,7 +637,7 @@ const DEMO_CATEGORIES = [
   ]}
 ];
 const TAGS = ["veg", "spicy", "best"];
-const STORE_KEY = "resto-menu-v1", PIN_KEY = "resto-pin", CART_KEY = "resto-cart-v1", DEFAULT_PIN = "1234";
+const STORE_KEY = "resto-menu-v2", PIN_KEY = "resto-pin", CART_KEY = "resto-cart-v1", DEFAULT_PIN = "1234";
 
 const store = {
   get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
